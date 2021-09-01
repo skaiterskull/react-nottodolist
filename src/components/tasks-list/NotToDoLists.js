@@ -46,13 +46,11 @@ export const NotToDoLists = ({
         </tbody>
       </Table>
 
-      {badHrs > 1 ? (
+      {badHrs > 1 && (
         <AlertDisplay
           color="success"
           text={`Total hours saved = ${badHrs}/week`}
         />
-      ) : (
-        ""
       )}
     </div>
   );

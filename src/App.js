@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { Col, Container, Row, Button } from "react-bootstrap";
+import { useState, useEffect } from "react";
+import { Col, Container, Row, Button, Spinner } from "react-bootstrap";
 import "./App.css";
 import { AddTaskForm } from "./components/add-task-form/AddTaskForm";
 import { TasksList } from "./components/tasks-list/TasksList";
 import { NotToDoLists } from "./components/tasks-list/NotToDoLists";
 import { AlertDisplay } from "./components/alert/AlertDisplay";
+import { postTask, fetchAllTask } from "./apis/taskApi";
 
 // import { Button, Alert } from "react-bootstrap";
 
@@ -12,24 +13,37 @@ function App() {
   const [tasks, settasks] = useState([]);
   const [badTasks, setBadTasks] = useState([]);
   const [hrsError, setHrsError] = useState(false);
-
   const [indexToDeleteFromTask, setIndexToDeleteFromTask] = useState([]);
   const [indexToDeleteFromBadTask, setIndexToDeleteFromBadTask] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const goodHrs = tasks.reduce((subTtl, item) => subTtl + +item.hr, 0);
   const badHrs = badTasks.reduce((badTtl, item) => badTtl + +item.hr, 0);
 
   const totalHrs = goodHrs + badHrs;
   const ttlPwK = 168;
-  const initial = 0;
 
-  const handleSubmit = (data) => {
+  useEffect(() => {
+    setIsLoading(true);
+    const loadAllData = async () => {
+      const { result } = await fetchAllTask();
+      setIsLoading(false);
+      settasks(result);
+    };
+    loadAllData();
+  }, []);
+
+  const handleSubmit = async (data) => {
     if (totalHrs + +data.hr > ttlPwK) {
       setHrsError(true);
       return;
     }
     settasks([...tasks, data]);
     setHrsError(false);
+
+    //send the data to server
+    const result = await postTask(data);
+    console.log(result, "from api");
   };
 
   //mark task list as bad task list
@@ -95,6 +109,7 @@ function App() {
       </Row>
 
       <hr />
+      {isLoading && <Spinner variant="primary" animation="border"></Spinner>}
       {hrsError && (
         <AlertDisplay
           color="warning"
