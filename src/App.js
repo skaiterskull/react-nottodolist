@@ -5,7 +5,7 @@ import { AddTaskForm } from "./components/add-task-form/AddTaskForm";
 import { TasksList } from "./components/tasks-list/TasksList";
 import { NotToDoLists } from "./components/tasks-list/NotToDoLists";
 import { AlertDisplay } from "./components/alert/AlertDisplay";
-import { postTask, fetchAllTask } from "./apis/taskApi";
+import { postTask, fetchAllTask, deleteTask } from "./apis/taskApi";
 
 // import { Button, Alert } from "react-bootstrap";
 
@@ -31,8 +31,15 @@ function App() {
       settasks(result);
     };
     loadAllData();
+    console.log("database loaded when reload page");
   }, []);
 
+  const loadAllData = async () => {
+    const { result } = await fetchAllTask();
+    setIsLoading(false);
+    settasks(result);
+    console.log("database loaded");
+  };
   const handleSubmit = async (data) => {
     if (totalHrs + +data.hr > ttlPwK) {
       setHrsError(true);
@@ -42,8 +49,8 @@ function App() {
     setHrsError(false);
 
     //send the data to server
-    const result = await postTask(data);
-    console.log(result, "from api");
+    await postTask(data);
+    loadAllData();
   };
 
   //mark task list as bad task list
@@ -87,17 +94,33 @@ function App() {
     }
   };
 
-  const deleteOnClick = () => {
+  const deleteOnClick = async () => {
     const tempArg = tasks.filter(
       (item, i) => !indexToDeleteFromTask.includes(i)
     );
     const tempArg1 = badTasks.filter(
       (item, i) => !indexToDeleteFromBadTask.includes(i)
     );
+
+    const goodListToDelete = tasks.filter((item, i) =>
+      indexToDeleteFromTask.includes(i)
+    );
+
+    const deleteGoodList = goodListToDelete.map((item, i) => {
+      const data = item._id;
+      return data;
+    });
+    await deleteTask(deleteGoodList);
     settasks(tempArg);
     setBadTasks(tempArg1);
     setIndexToDeleteFromTask([]);
     setIndexToDeleteFromBadTask([]);
+    loadAllData();
+
+    //delete task
+
+    console.log(deleteGoodList);
+    // console.log(result, "from api");
   };
 
   return (

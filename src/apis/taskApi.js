@@ -6,6 +6,7 @@ const rootApi = "http://localhost:8000/api/v1/";
 export const fetchAllTask = async () => {
   try {
     const { data } = await axios.get(rootApi);
+
     return data;
   } catch (error) {
     return {
@@ -16,9 +17,24 @@ export const fetchAllTask = async () => {
 };
 
 // INSERT DATA TO DATABASE----------------------------------------------------
-export const postTask = async (newTask) => {
+export const postTask = async (task) => {
   try {
-    const { data } = await axios.post(rootApi, newTask);
+    const { data } = await axios.post(rootApi, task);
+  } catch (error) {
+    return {
+      status: "error",
+      message: error.message,
+    };
+  }
+};
+
+// DELETE DATA FROM DATABASE -------------------------------------------------
+export const deleteTask = async (task) => {
+  try {
+    const { data } = await axios.delete(rootApi, {
+      data: { _id: task },
+    });
+    console.log(data);
     return data;
   } catch (error) {
     return {
