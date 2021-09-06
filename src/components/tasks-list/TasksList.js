@@ -23,8 +23,8 @@ export const TasksList = ({
               <td>
                 <input
                   type="checkbox"
-                  defaultValue={i}
-                  checked={indexToDeleteFromTask.includes(i)}
+                  defaultValue={items._id}
+                  checked={indexToDeleteFromTask.includes(items._id)}
                   onChange={handleOnTaskChecked}
                 />{" "}
                 <label>{items.task}</label>
@@ -33,7 +33,7 @@ export const TasksList = ({
               <td>
                 <Button
                   onClick={() => {
-                    return markAsBadList(i);
+                    return markAsBadList({ id: items._id, todo: false });
                   }}
                 >
                   Move to Not-to-do List

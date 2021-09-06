@@ -4,9 +4,9 @@ import { AlertDisplay } from "../alert/AlertDisplay";
 export const NotToDoLists = ({
   badTasks,
   markAsGoodList,
-  handleOnBadTaskChecked,
-  indexToDeleteFromBadTask,
-  badHrs,
+  handleOnTaskChecked,
+  indexToDeleteFromTask,
+  badListOnlyHour,
 }) => {
   return (
     <div>
@@ -25,9 +25,9 @@ export const NotToDoLists = ({
               <td>
                 <input
                   type="checkbox"
-                  defaultValue={i}
-                  checked={indexToDeleteFromBadTask.includes(i)}
-                  onChange={handleOnBadTaskChecked}
+                  defaultValue={items._id}
+                  checked={indexToDeleteFromTask.includes(items._id)}
+                  onChange={handleOnTaskChecked}
                 />{" "}
                 <label>{items.task}</label>
               </td>
@@ -35,7 +35,7 @@ export const NotToDoLists = ({
               <td>
                 <Button
                   onClick={() => {
-                    return markAsGoodList(i);
+                    return markAsGoodList({ id: items._id, todo: true });
                   }}
                 >
                   Move To Do List
@@ -46,10 +46,10 @@ export const NotToDoLists = ({
         </tbody>
       </Table>
 
-      {badHrs > 1 && (
+      {badListOnlyHour > 1 && (
         <AlertDisplay
           color="success"
-          text={`Total hours saved = ${badHrs}/week`}
+          text={`Total hours saved = ${badListOnlyHour}/week`}
         />
       )}
     </div>

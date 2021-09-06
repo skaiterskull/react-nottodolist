@@ -20,6 +20,7 @@ export const fetchAllTask = async () => {
 export const postTask = async (task) => {
   try {
     const { data } = await axios.post(rootApi, task);
+    return data;
   } catch (error) {
     return {
       status: "error",
@@ -31,9 +32,21 @@ export const postTask = async (task) => {
 // DELETE DATA FROM DATABASE -------------------------------------------------
 export const deleteTask = async (task) => {
   try {
-    const { data } = await axios.delete(rootApi, {
-      data: { _id: task },
-    });
+    const { data } = await axios.delete(rootApi, { data: task });
+    console.log(data);
+    return data;
+  } catch (error) {
+    return {
+      status: "error",
+      message: error.message,
+    };
+  }
+};
+
+// UPDATE DATA FROM DATABASE
+export const updateTask = async (obj) => {
+  try {
+    const { data } = await axios.patch(rootApi, obj);
     console.log(data);
     return data;
   } catch (error) {
