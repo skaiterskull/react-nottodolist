@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Form, Col, Button, Row } from "react-bootstrap";
 import { addTask } from "../tasks-list/taskAction.js";
-import { useDispatch } from "react-redux";
+import { requestFailed } from "../tasks-list/taskSlice.js";
+import { useDispatch, useSelector } from "react-redux";
 
 const initialFromDt = {
   task: "Watching TV",
@@ -10,6 +11,7 @@ const initialFromDt = {
 
 export const AddTaskForm = () => {
   const dispatch = useDispatch();
+  const { totalHrs } = useSelector((state) => state.task);
   const [formDt, setFormDt] = useState(initialFromDt);
 
   const handleOnChange = (e) => {
@@ -23,7 +25,16 @@ export const AddTaskForm = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    dispatch(addTask(formDt));
+    if (totalHrs + +formDt.hr > 168) {
+      dispatch(
+        requestFailed({
+          status: "Error",
+          message: "You dont have enough hours to add",
+        })
+      );
+    } else {
+      dispatch(addTask(formDt));
+    }
   };
 
   return (

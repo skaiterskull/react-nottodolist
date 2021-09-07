@@ -7,6 +7,7 @@ const initialState = {
   message: "",
   isLoading: false,
   totalHrs: 0,
+  idToDelete: [],
 };
 
 const taskSlice = createSlice({
@@ -23,6 +24,13 @@ const taskSlice = createSlice({
       state.message = message;
     },
 
+    deleteTaskSuccess: (state, { payload: { status, message } }) => {
+      state.isLoading = false;
+      state.status = status;
+      state.message = message;
+      state.idToDelete = [];
+    },
+
     fetchTaskListSuccess: (state, { payload }) => {
       const { result } = payload;
       state.isLoading = false;
@@ -31,6 +39,15 @@ const taskSlice = createSlice({
       state.totalHrs = result
         ? result.reduce((subTtl, item) => subTtl + +item.hr, 0)
         : 0;
+    },
+
+    setIdToDelete: (state, { payload: { checked, value } }) => {
+      if (checked) {
+        state.idToDelete = [...state.idToDelete, value];
+      } else {
+        const tempAry = state.idToDelete.filter((item) => item !== value);
+        state.idToDelete = tempAry;
+      }
     },
 
     requestFailed: (state, { payload }) => {
@@ -49,5 +66,7 @@ export const {
   fetchTaskListSuccess,
   requestFailed,
   updateTaskSuccess,
+  deleteTaskSuccess,
+  setIdToDelete,
 } = actions;
 export default reducer;
