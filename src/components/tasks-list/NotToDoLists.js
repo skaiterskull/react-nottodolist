@@ -1,12 +1,13 @@
 import { Table, Button } from "react-bootstrap";
 import { AlertDisplay } from "../alert/AlertDisplay";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { switchTask } from "./taskAction";
 
 export const NotToDoLists = ({
-  markAsGoodList,
   handleOnTaskChecked,
   indexToDeleteFromTask,
 }) => {
+  const dispatch = useDispatch();
   const { badList } = useSelector((state) => state.task);
   const badListOnlyHour = badList.reduce(
     (subTtl, item) => subTtl + +item.hr,
@@ -39,7 +40,7 @@ export const NotToDoLists = ({
               <td>
                 <Button
                   onClick={() => {
-                    return markAsGoodList({ id: items._id, todo: true });
+                    return dispatch(switchTask({ id: items._id, todo: true }));
                   }}
                 >
                   Move To Do List

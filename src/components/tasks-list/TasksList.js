@@ -1,5 +1,6 @@
 import { Table, Button } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { switchTask } from "./taskAction.js";
 
 export const TasksList = ({
   markAsBadList,
@@ -7,6 +8,7 @@ export const TasksList = ({
   indexToDeleteFromTask,
 }) => {
   const { taskList } = useSelector((state) => state.task);
+  const dispatch = useDispatch();
   return (
     <div>
       <h2>Task Lists</h2>
@@ -34,7 +36,7 @@ export const TasksList = ({
               <td>
                 <Button
                   onClick={() => {
-                    return markAsBadList({ id: items._id, todo: false });
+                    return dispatch(switchTask({ id: items._id, todo: false }));
                   }}
                 >
                   Move to Not-to-do List

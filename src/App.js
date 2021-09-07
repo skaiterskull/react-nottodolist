@@ -6,34 +6,20 @@ import { AddTaskForm } from "./components/add-task-form/AddTaskForm";
 import { TasksList } from "./components/tasks-list/TasksList";
 import { NotToDoLists } from "./components/tasks-list/NotToDoLists";
 import { AlertDisplay } from "./components/alert/AlertDisplay";
-import { postTask, fetchAllTask, deleteTask, updateTask } from "./apis/taskApi";
+import { deleteTask } from "./apis/taskApi";
 import { loadAllData } from "./components/tasks-list/taskAction.js";
 
 function App() {
   const dispatch = useDispatch();
-  const [hrsError, setHrsError] = useState(false);
   const [indexToDeleteFromTask, setIndexToDeleteFromTask] = useState([]);
-  const { totalHrs, isLoading } = useSelector((state) => state.task);
-  console.log(totalHrs);
-
-  const ttlPwK = 168;
+  const { totalHrs, isLoading, status, message } = useSelector(
+    (state) => state.task
+  );
 
   useEffect(() => {
     dispatch(loadAllData());
   }, []);
 
-  const handleSubmit = async (data) => {
-    if (totalHrs + +data.hr > ttlPwK) {
-      setHrsError(true);
-      return;
-    }
-    setHrsError(false);
-    const { status } = await postTask(data);
-    console.log(status);
-    if (status === "Success") {
-      loadAllData();
-    }
-  };
   const handleOnTaskChecked = (e) => {
     const { checked, value } = e.target;
 
@@ -52,12 +38,7 @@ function App() {
     }
     setIndexToDeleteFromTask([]);
   };
-  const switchTask = async (obj) => {
-    const { status } = await updateTask(obj);
-    if (status === "Success") {
-      loadAllData();
-    }
-  };
+
   return (
     <Container>
       <Row className="mt-5 mt text-center">
@@ -67,27 +48,25 @@ function App() {
       </Row>
 
       <hr />
+
       {isLoading && <Spinner variant="primary" animation="border"></Spinner>}
-      {hrsError && (
+      {status && (
         <AlertDisplay
-          color="warning"
-          text={`You dont have hours left to allocate this task`}
+          color={status === "Success" ? "success" : "danger"}
+          text={message}
         />
       )}
-
-      <AddTaskForm handleSubmit={handleSubmit} />
+      <AddTaskForm />
       <hr />
       <Row>
         <Col md="6">
           <TasksList
-            markAsBadList={switchTask}
             handleOnTaskChecked={handleOnTaskChecked}
             indexToDeleteFromTask={indexToDeleteFromTask}
           />
         </Col>
         <Col md="6">
           <NotToDoLists
-            markAsGoodList={switchTask}
             handleOnTaskChecked={handleOnTaskChecked}
             indexToDeleteFromTask={indexToDeleteFromTask}
           />

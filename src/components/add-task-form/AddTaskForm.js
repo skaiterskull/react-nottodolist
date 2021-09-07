@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { Form, Col, Button, Row } from "react-bootstrap";
+import { addTask } from "../tasks-list/taskAction.js";
+import { useDispatch } from "react-redux";
 
 const initialFromDt = {
   task: "Watching TV",
   hr: 10,
 };
 
-export const AddTaskForm = ({ handleSubmit }) => {
+export const AddTaskForm = () => {
+  const dispatch = useDispatch();
   const [formDt, setFormDt] = useState(initialFromDt);
 
   const handleOnChange = (e) => {
@@ -20,7 +23,7 @@ export const AddTaskForm = ({ handleSubmit }) => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    handleSubmit(formDt);
+    dispatch(addTask(formDt));
   };
 
   return (

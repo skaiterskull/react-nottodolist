@@ -17,27 +17,37 @@ const taskSlice = createSlice({
       state.isLoading = true;
     },
 
-    fetchTaskListSuccess: (state, { payload }) => {
-      const { status, message, result } = payload;
+    updateTaskSuccess: (state, { payload: { status, message } }) => {
       state.isLoading = false;
       state.status = status;
       state.message = message;
+    },
 
+    fetchTaskListSuccess: (state, { payload }) => {
+      const { result } = payload;
+      state.isLoading = false;
       state.taskList = result.filter((item) => item.todo);
       state.badList = result.filter((item) => !item.todo);
-      //   console.log(result, "from aaa");
       state.totalHrs = result
         ? result.reduce((subTtl, item) => subTtl + +item.hr, 0)
         : 0;
     },
 
-    requestFailed: (state) => {
+    requestFailed: (state, { payload }) => {
+      const { status, message } = payload;
       state.isLoading = false;
+      state.status = status;
+      state.message = message;
     },
   },
 });
 
 const { reducer, actions } = taskSlice;
 
-export const { requestPending, fetchTaskListSuccess, requestFailed } = actions;
+export const {
+  requestPending,
+  fetchTaskListSuccess,
+  requestFailed,
+  updateTaskSuccess,
+} = actions;
 export default reducer;
