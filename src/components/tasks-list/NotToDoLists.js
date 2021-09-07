@@ -1,13 +1,17 @@
 import { Table, Button } from "react-bootstrap";
 import { AlertDisplay } from "../alert/AlertDisplay";
+import { useSelector } from "react-redux";
 
 export const NotToDoLists = ({
-  badTasks,
   markAsGoodList,
   handleOnTaskChecked,
   indexToDeleteFromTask,
-  badListOnlyHour,
 }) => {
+  const { badList } = useSelector((state) => state.task);
+  const badListOnlyHour = badList.reduce(
+    (subTtl, item) => subTtl + +item.hr,
+    0
+  );
   return (
     <div>
       <h2>Bad Task Lists</h2>
@@ -20,7 +24,7 @@ export const NotToDoLists = ({
           </tr>
         </thead>
         <tbody className="text-center">
-          {badTasks.map((items, i) => (
+          {badList.map((items, i) => (
             <tr key={i}>
               <td>
                 <input

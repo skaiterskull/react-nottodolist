@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Col, Container, Row, Button, Spinner } from "react-bootstrap";
 import "./App.css";
 import { AddTaskForm } from "./components/add-task-form/AddTaskForm";
@@ -6,38 +7,21 @@ import { TasksList } from "./components/tasks-list/TasksList";
 import { NotToDoLists } from "./components/tasks-list/NotToDoLists";
 import { AlertDisplay } from "./components/alert/AlertDisplay";
 import { postTask, fetchAllTask, deleteTask, updateTask } from "./apis/taskApi";
+import { loadAllData } from "./components/tasks-list/taskAction.js";
 
 function App() {
-  const [tasks, settasks] = useState([]);
+  const dispatch = useDispatch();
   const [hrsError, setHrsError] = useState(false);
   const [indexToDeleteFromTask, setIndexToDeleteFromTask] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const { totalHrs, isLoading } = useSelector((state) => state.task);
+  console.log(totalHrs);
 
-  const taskListOnly = tasks.filter((item) => item.todo);
-  const badListOnly = tasks.filter((item) => !item.todo);
-  const totalHrs = tasks.reduce((subTtl, item) => subTtl + +item.hr, 0);
-  const badListOnlyHour = badListOnly.reduce(
-    (subTtl, item) => subTtl + +item.hr,
-    0
-  );
   const ttlPwK = 168;
 
   useEffect(() => {
-    setIsLoading(true);
-    const loadAllData = async () => {
-      const { result } = await fetchAllTask();
-      setIsLoading(false);
-      settasks(result);
-    };
-    loadAllData();
-    console.log("database loaded when reload page");
+    dispatch(loadAllData());
   }, []);
 
-  const loadAllData = async () => {
-    const { result } = await fetchAllTask();
-    settasks(result);
-    console.log("database loaded");
-  };
   const handleSubmit = async (data) => {
     if (totalHrs + +data.hr > ttlPwK) {
       setHrsError(true);
@@ -74,7 +58,6 @@ function App() {
       loadAllData();
     }
   };
-
   return (
     <Container>
       <Row className="mt-5 mt text-center">
@@ -97,7 +80,6 @@ function App() {
       <Row>
         <Col md="6">
           <TasksList
-            tasks={taskListOnly}
             markAsBadList={switchTask}
             handleOnTaskChecked={handleOnTaskChecked}
             indexToDeleteFromTask={indexToDeleteFromTask}
@@ -105,8 +87,6 @@ function App() {
         </Col>
         <Col md="6">
           <NotToDoLists
-            badListOnlyHour={badListOnlyHour}
-            badTasks={badListOnly}
             markAsGoodList={switchTask}
             handleOnTaskChecked={handleOnTaskChecked}
             indexToDeleteFromTask={indexToDeleteFromTask}
@@ -133,5 +113,4 @@ function App() {
     </Container>
   );
 }
-
 export default App;

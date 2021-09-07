@@ -1,11 +1,12 @@
 import { Table, Button } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 export const TasksList = ({
-  tasks,
   markAsBadList,
   handleOnTaskChecked,
   indexToDeleteFromTask,
 }) => {
+  const { taskList } = useSelector((state) => state.task);
   return (
     <div>
       <h2>Task Lists</h2>
@@ -18,7 +19,7 @@ export const TasksList = ({
           </tr>
         </thead>
         <tbody className="text-center">
-          {tasks.map((items, i) => (
+          {taskList.map((items, i) => (
             <tr key={i}>
               <td>
                 <input
