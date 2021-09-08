@@ -19,7 +19,7 @@ export const MainContent = () => {
   );
   return (
     <>
-      <Row className="mt-5 mt text-center">
+      <Row className="mt-5 text-center">
         <Col>
           <h1>Not to Do Task List</h1>
         </Col>
@@ -27,7 +27,7 @@ export const MainContent = () => {
       <hr />
 
       {isLoading && (
-        <Row className="mt-5 mt text-center">
+        <Row className="mt-5 text-center">
           <Col>
             <Spinner variant="primary" animation="border"></Spinner>
           </Col>

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const rootApi = "http://localhost:8000/api/v1/";
+const rootApi = "http://localhost:8000/api/v1/task";
 
 // DISPLAY ALL THE DATA-------------------------------------------------------
 export const fetchAllTask = async () => {

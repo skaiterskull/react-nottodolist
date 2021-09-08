@@ -4,8 +4,8 @@ const initialState = {
   status: "",
   message: "",
   isLoading: false,
-  userId: "",
-  userName: "",
+  // userId: "",
+  // userName: "",
   isLoggedIn: false,
 };
 
@@ -15,6 +15,12 @@ const userSlice = createSlice({
   reducers: {
     requestPending: (state) => {
       state.isLoading = true;
+    },
+
+    createUserSuccess: (state, { payload: { status, message } }) => {
+      state.isLoading = false;
+      state.status = status;
+      state.message = message;
     },
 
     requestFailed: (state, { payload }) => {
@@ -28,5 +34,5 @@ const userSlice = createSlice({
 
 const { reducer, actions } = userSlice;
 
-export const { requestPending, requestFailed } = actions;
+export const { requestPending, requestFailed, createUserSuccess } = actions;
 export default reducer;

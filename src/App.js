@@ -5,8 +5,8 @@ import { UserForm } from "./components/user-form/UserForm";
 import { MainContent } from "./components/main-content/MainContent";
 
 function App() {
-  const { isLoggined } = useSelector((state) => state.user);
+  const { isLoggedIn } = useSelector((state) => state.user);
 
-  return <Container>{isLoggined ? <MainContent /> : <UserForm />}</Container>;
+  return <Container>{isLoggedIn ? <MainContent /> : <UserForm />}</Container>;
 }
 export default App;
