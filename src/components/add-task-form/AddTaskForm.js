@@ -33,7 +33,8 @@ export const AddTaskForm = () => {
         })
       );
     } else {
-      dispatch(addTask(formDt));
+      const userid = window.localStorage.getItem("_id");
+      dispatch(addTask({ ...formDt, userid }));
     }
   };
 

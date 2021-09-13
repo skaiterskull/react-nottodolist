@@ -4,13 +4,11 @@ const initialState = {
   status: "",
   message: "",
   isLoading: false,
-  // userId: "",
-  // userName: "",
   isLoggedIn: false,
 };
 
 const userSlice = createSlice({
-  name: "taskList",
+  name: "user",
   initialState,
   reducers: {
     requestPending: (state) => {
@@ -21,6 +19,17 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.status = status;
       state.message = message;
+    },
+
+    loginUserSuccess: (state) => {
+      state.isLoading = false;
+      state.isLoggedIn = true;
+      state.status = "";
+      state.message = "";
+    },
+
+    userLogout: (state) => {
+      state.isLoggedIn = false;
     },
 
     requestFailed: (state, { payload }) => {
@@ -34,5 +43,11 @@ const userSlice = createSlice({
 
 const { reducer, actions } = userSlice;
 
-export const { requestPending, requestFailed, createUserSuccess } = actions;
+export const {
+  requestPending,
+  requestFailed,
+  createUserSuccess,
+  loginUserSuccess,
+  userLogout,
+} = actions;
 export default reducer;

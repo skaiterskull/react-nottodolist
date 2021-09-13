@@ -14,3 +14,16 @@ export const postUser = async (newUser) => {
     };
   }
 };
+
+//GET USER
+export const getUser = async (userName) => {
+  try {
+    const { data } = await axios.post(rootApi, userName);
+    return data;
+  } catch (error) {
+    return {
+      status: "Error",
+      message: error.message,
+    };
+  }
+};

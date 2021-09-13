@@ -5,7 +5,11 @@ const rootApi = "http://localhost:8000/api/v1/task";
 // DISPLAY ALL THE DATA-------------------------------------------------------
 export const fetchAllTask = async () => {
   try {
-    const { data } = await axios.get(rootApi);
+    const { data } = await axios.get(rootApi, {
+      headers: {
+        Authorization: window.localStorage.getItem("_id"),
+      },
+    });
 
     return data;
   } catch (error) {
@@ -19,7 +23,11 @@ export const fetchAllTask = async () => {
 // INSERT DATA TO DATABASE----------------------------------------------------
 export const postTask = async (task) => {
   try {
-    const { data } = await axios.post(rootApi, task);
+    const { data } = await axios.post(rootApi, task, {
+      headers: {
+        Authorization: window.localStorage.getItem("_id"),
+      },
+    });
     return data;
   } catch (error) {
     return {
@@ -32,7 +40,10 @@ export const postTask = async (task) => {
 // DELETE DATA FROM DATABASE -------------------------------------------------
 export const deleteTask = async (task) => {
   try {
-    const { data } = await axios.delete(rootApi, { data: task });
+    const { data } = await axios.delete(rootApi, {
+      headers: { Authorization: window.localStorage.getItem("_id") },
+      data: task,
+    });
     console.log(data);
     return data;
   } catch (error) {
@@ -46,7 +57,11 @@ export const deleteTask = async (task) => {
 // UPDATE DATA FROM DATABASE
 export const updateTask = async (obj) => {
   try {
-    const { data } = await axios.patch(rootApi, obj);
+    const { data } = await axios.patch(rootApi, obj, {
+      headers: {
+        Authorization: window.localStorage.getItem("_id"),
+      },
+    });
     console.log(data);
     return data;
   } catch (error) {

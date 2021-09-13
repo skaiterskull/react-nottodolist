@@ -2,19 +2,22 @@ import React from "react";
 import { useRef } from "react";
 import { Form, Button, Card, Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { createNewUser } from "./userAction";
+import { createNewUser, loginUser } from "./userAction";
 import { AlertDisplay } from "../alert/AlertDisplay";
 
 export const UserForm = () => {
   const userRefLogin = useRef("");
   const userRefRegister = useRef("");
   const dispatch = useDispatch();
-  const { isLoading, status, message, isLoggedIn } = useSelector(
-    (state) => state.user
-  );
+  const { status, message } = useSelector((state) => state.user);
 
   const handleOnLogin = () => {
     const userName = userRefLogin.current.value;
+    if (!userName) {
+      return alert("User name must be provided");
+    }
+
+    dispatch(loginUser({ userName }));
   };
 
   const handleOnRegister = () => {

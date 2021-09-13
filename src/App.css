@@ -2,3 +2,8 @@ input:checked + label {
   color: red;
   text-decoration: line-through;
 }
+
+.welcomeText {
+  margin-right: 1.5rem;
+  text-transform: uppercase;
+}
